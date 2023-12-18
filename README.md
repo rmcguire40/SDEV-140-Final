@@ -31,7 +31,3 @@ ex. `python main.py --cli Valparaiso, IN`
 `python main.py --test`
 
 Tests both the naming and weather fetching code, then runs the gui
-
-# TODO
- - [ ] Error Window
- - [ ] Exit Button
