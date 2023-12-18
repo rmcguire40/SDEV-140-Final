@@ -111,6 +111,7 @@ class GUI(tk.Tk):
         self.hintLabel.pack()
 
         self.inputBox = tk.Entry(self)
+        self.inputBox.insert(0, "Valparaiso, IN")
         self.inputBox.pack()
     
         # draw the buttons
