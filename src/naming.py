@@ -59,21 +59,13 @@ def get_coordinates(city_name):
 
     # URL encode the city name
     city_name_encoded = urllib.parse.quote_plus(city_name)
-    
+
     # Define the URL for the API request
     url = f"https://nominatim.openstreetmap.org/search?q={city_name_encoded}&format=json"
 
     # Make the request and read the response
     with urllib.request.urlopen(url) as response:
-        # Decode and convert the response to JSON
-        data = json.loads(response.read().decode())
-
-        # Check if data contains any results
-        if data:
-            # Return the latitude and longitude of the first result
-            lat = float(data[0]["lat"])
-            lon = float(data[0]["lon"])
-            return lat, lon
-        else:
-            print(data)
-            raise ValueError(f"Failed to find coordinates for {city_name}")
+        if data := json.loads(response.read().decode()):
+            return float(data[0]["lat"]), float(data[0]["lon"])
+        print(data)
+        raise ValueError(f"Failed to find coordinates for {city_name}")

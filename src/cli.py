@@ -28,19 +28,13 @@ def get_humidity_color(humidity):
         return colors.red
     
 def get_target_city():
-    # combs through sys.argv for a city name, allows spaces in city names
-    # returns the city name or None if not found
-    city_name = ""
-    for arg in sys.argv:
-        if arg.startswith("-") or arg == sys.argv[0]:
-            continue
-        else:
-            city_name += arg + " "
+    city_name = "".join(
+        f"{arg} "
+        for arg in sys.argv
+        if not arg.startswith("-") and arg != sys.argv[0]
+    )
     city_name = city_name.strip()
-    if city_name == "":
-        return None
-    else:
-        return city_name
+    return None if not city_name else city_name
 
 def cli():
     cprint(f"WeatherGuy v{VERSION_NUMBER}", colors.bold)
@@ -52,16 +46,16 @@ def cli():
         print(f"City name {city_name} not found")
         exit(1)
     except urllib.error.URLError:
-        print(f"HTTP or internet error")
+        print("HTTP or internet error")
         exit(1)
-    
+
     try:
         weather = get_weather(coords)
     except ValueError:
         print(f"Coordinates {coords} not found")
         exit(1)
     except urllib.error.URLError:
-        print(f"HTTP or internet error")
+        print("HTTP or internet error")
         exit(1)
 
     today_str = "Today" if weather['is_day'] else "Tonight"
@@ -73,7 +67,7 @@ def cli():
     print(f"╠╡ {today_str} ({date_str})")
     print(f"╠╡ {describe_weather_code(weather['weather_code'])}")
 
-    
+
     temp_str = f"{celsius_to_fahrenheit(weather['temperature_2m'])}°F ({weather['temperature_2m']}°C)" \
                 if  not CELSIUS_MODE else f"{weather['temperature_2m']}°C ({celsius_to_fahrenheit(weather['temperature_2m'])}°F)"
 
@@ -98,11 +92,11 @@ def cli():
 
     if weather['rain'] > 0:
         print(f"╠═╡ Rain:              {colors.bold}{weather['rain']}mm{colors.end}")
-    
+
     if weather['snowfall'] > 0:
         print(f"╠═╡ Snowfall:          {colors.bold}{weather['snowfall']}mm{colors.end}")
-    
+
     if weather['precipitation'] > 0 and weather['precipitation'] >= weather['rain'] + weather['snowfall']:
         print(f"╠═╡ Precipitation:     {colors.bold}{weather['precipitation']}mm{colors.end}")
-    
+
     print(f"╚══ Weather Code:      {colors.bold}{weather['weather_code']}{colors.end}")

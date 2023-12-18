@@ -25,10 +25,7 @@ def celsius_to_fahrenheit(celsius, round_result=True):
     Returns:
         float: The temperature in fahrenheit
     """
-    if round:
-        return round(celsius * 9/5 + 32)
-    else:
-        return celsius * 9/5 + 32
+    return round(celsius * 9/5 + 32) if round else celsius * 9/5 + 32
 
 def fahrenheit_to_celsius(fahrenheit, round_result=True):
     """Converts fahrenheit to celsius for temperature conversion
@@ -40,10 +37,7 @@ def fahrenheit_to_celsius(fahrenheit, round_result=True):
     Returns:
         float: The temperature in celsius
     """
-    if round:
-        return round((fahrenheit - 32) * 5/9)
-    else:
-        return (fahrenheit - 32) * 5/9
+    return round((fahrenheit - 32) * 5/9) if round else (fahrenheit - 32) * 5/9
     
 def describe_weather_code(weathercode: int):
     """This uses the weathercodes.py file to get a description of the weather code
@@ -56,7 +50,7 @@ def describe_weather_code(weathercode: int):
     """
     if isinstance(weathercode, int):
         if len(str(weathercode)) == 1:
-            weathercode = "0" + str(weathercode)
+            weathercode = f"0{weathercode}"
     return CODES[str(weathercode)]
 
 # https://www.nodc.noaa.gov/archive/arc0021/0002199/1.1/data/0-data/HTML/WMO-CODE/WMO4677.HTM
@@ -70,41 +64,37 @@ def weather_code_to_image(weathercode: int):
         str: the path to the weather image, which is just a gif of an emoji
     """
     if weathercode < 20:
-        if weathercode in [11, 12]:
-            return f"assets/rain.gif"
-        if weathercode == 5:
-            return f"assets/fog.gif"
-        else:
-            return f"assets/clear.gif"
-        
+        if weathercode in {11, 12}:
+            return "assets/rain.gif"
+        return "assets/fog.gif" if weathercode == 5 else "assets/clear.gif"
     elif weathercode < 30:
-        if weathercode in [22, 23, 24]:
-            return f"assets/snow.gif"
+        if weathercode in {22, 23, 24}:
+            return "assets/snow.gif"
         elif weathercode == 28:
-            return f"aassets/fog.gif"
+            return "aassets/fog.gif"
         elif weathercode == 29:
             return "assets/storm.gif"
         else:
-            return f"assets/rain.gif"
-    
+            return "assets/rain.gif"
+
     elif weathercode < 50:
-        return f"assets/fog.gif"
-    
+        return "assets/fog.gif"
+
     elif weathercode < 70:  # drizzle
-        return f"assets/rain.gif"
-    
+        return "assets/rain.gif"
+
     elif weathercode < 80:
-        return f"assets/snow.gif"
+        return "assets/snow.gif"
 
     elif weathercode < 85:
-        return f"assets/rain.gif"
-    
+        return "assets/rain.gif"
+
     elif weathercode < 91:
-        return f"assets/snow.gif"
-    
+        return "assets/snow.gif"
+
     elif weathercode < 100:
-        return f"assets/rain.gif"
-    
+        return "assets/rain.gif"
+            
 
     return f"assets/{weathercode}.gif"
 
